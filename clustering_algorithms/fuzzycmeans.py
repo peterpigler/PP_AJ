@@ -2,16 +2,6 @@
 """
 @FCMclust
 
-@Variables:
-    X : Normalized data set Matrix
-    N : Number of Data
-    c : Number of Clusters
-    C : Cluster Matrix
-    U : Fuzzy-Partition Matrix
-    D : Fuzzy-Distance Matrix
-    m : Weighting exponent
-    epsilon : Termination tolerance
-
 @author: Peter Pigler
 """
 import numpy as np
@@ -68,7 +58,7 @@ adat.set_xlabel("Axis X")
 adat.set_ylabel("Axis Y")
 adat.set_zlabel("Axis Z")
 for i in range(N):
-    adat.scatter(X[i][0], X[i][1], X[i][2], c = tuple(U[i]), s = 80)
+    adat.scatter(X[i][0], X[i][1], X[i][2], c = tuple(v[i]), s = 80)
 for i in range(c):
     adat.scatter(v[i][0], v[i][1], v[i][2], s = 400, marker = '+')
 
