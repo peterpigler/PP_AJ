@@ -58,8 +58,8 @@ adat.set_xlabel("Axis X")
 adat.set_ylabel("Axis Y")
 adat.set_zlabel("Axis Z")
 for i in range(N):
-    adat.scatter(X[i][0], X[i][1], X[i][2], c = tuple(v[i]), s = 80)
+    adat.scatter(X[i][0], X[i][1], X[i][2], c = tuple(f[i]), s = 80)
 for i in range(c):
-    adat.scatter(v[i][0], v[i][1], v[i][2], s = 400, marker = '+')
+    adat.scatter(v[i][0], v[i][1], v[i][2], s = 300, alpha = 0.6, c = "white")
 
 plt.show()
