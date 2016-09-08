@@ -62,4 +62,4 @@ for i in range(N):
 for i in range(c):
     adat.scatter(v[i][0], v[i][1], v[i][2], s = 400, marker = '+')
 
-plt.show()   
+plt.show()
