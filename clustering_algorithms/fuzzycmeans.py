@@ -24,12 +24,13 @@ f_new = np.zeros_like(f)    #f partition matrix in next iteration
 d = np.zeros_like(f)
 v = np.zeros((c,n))
 
-#Initialize Partitionmatrix randomly
+#Initialize Partition matrix randomly
 for i in range(N):
     f[i][randint(0,c-1)] = 1
 
 #Iterate
-while True:
+run = 0
+while True and run!=20:
     #Calculate cluster prototypes:
     for i in range(c):
         # noinspection PyTypeChecker
@@ -50,6 +51,7 @@ while True:
     if np.linalg.norm(f-f_new) < e:
         break   #If the distance between current U and U in the previous iteration is under terminate tolerance, halt 
     f=np.copy(f_new)
+    run+=1
 
 #Plot 
 fig = plt.figure("FCMclust - "+str(c)+" clusters")

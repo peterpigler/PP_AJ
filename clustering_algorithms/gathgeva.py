@@ -79,7 +79,7 @@ while True and (run != 1):
         break   #If the distance between current U and U in the previous iteration is under terminate tolerance, halt
     U = np.copy(U_new)
     run += 1    
-"""
+
 #Plot
 fig = plt.figure("GathGeva Clustering - "+str(c)+" clusters")
 adat = fig.add_subplot(111,projection='3d')
@@ -92,4 +92,3 @@ for i in range(c):
     adat.scatter(C[i][0], C[i][1], C[i][2], s = 400, marker = '+')
 
 plt.show()   
- """   
