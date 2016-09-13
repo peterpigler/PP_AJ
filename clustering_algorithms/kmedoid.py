@@ -33,7 +33,7 @@ for i in range(c):
 #Iterate
 run = 0
 while True and run != 20:
-    #Calculate each points' belongings
+    #Calculate each points' belongings 
     for i in range(c):
         d[:,i] = np.apply_along_axis(np.linalg.norm,1,X-v[i])
     f_new = np.argmin(d, axis=1)
