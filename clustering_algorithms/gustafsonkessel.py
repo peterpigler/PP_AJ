@@ -51,7 +51,7 @@ while True and (run != 20):
     for i in range(c):
         A = np.dot(pow(np.linalg.det(P[i]),1.0/n),np.linalg.inv(P[i]))
         for j in range(N):
-            d[j,i] = sqrt(np.dot((np.dot((X[j]-v[i]),A)),X[j]-v[i]))
+            d[j,i] = sqrt(np.dot((np.dot((X[j]-v[i]), A)),X[j]-v[i]))
          
     #Update the partition matrix:
     for i in range(N):

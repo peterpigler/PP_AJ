@@ -29,7 +29,6 @@ v = np.zeros((c,n))
 for i in range(c):
     v[i] = X[randint(0,N-1)]
     while not v[np.where(v == v[i])].all():
-        print v[i]
         v[i] = X[randint(0,N-1)]
 
 #Iterate

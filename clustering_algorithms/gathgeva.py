@@ -32,7 +32,7 @@ run = 0
 
 P = np.zeros((c,n,n))   # covariance matrix
 
-while True and (run != 1):
+while True and (run != 10):
     # Calculate cluster prototypes:
     fm = pow(f,m)
     for i in range(c):
@@ -40,35 +40,40 @@ while True and (run != 1):
 
     # Calculate prior probability
     Pi = 1.0/N*fm.sum(axis = 0)   # gives prior probability of selecting i-th cluster
-        
+
     # Calculate F covariance matrix, weighted by U
-    for i in range(c):        
+    for i in range(c):
         # np.fill_diagonal(P[i],1)
         Xf = X-v[i]
         Xf = np.multiply(Xf,fm.T[i][:, np.newaxis])
         P[i] = np.cov(Xf.T)
-        
-        B = np.exp(1./2*np.dot(pow(np.linalg.det(P[i]),1.0/n),np.linalg.pinv(P[i])))
-        #for j in range(N):
-        #    D[j,i] = sqrt(np.dot((np.dot((X[j]-C[i]),A)),X[j]-C[i])) 
-        #Calculate the distances:    
+        #A = np.dot(pow(np.linalg.det(P[i]), 1.0 / n), np.linalg.inv(P[i]))
+        AA = 1/pow(np.linalg.det(np.linalg.pinv(P[i])),n/2.)*1/Pi[i]  #meg kell nézni
+        A = np.dot(pow(np.linalg.det(P[i]), 1.0 / n), np.linalg.inv(P[i]))
+        for j in range(N):
+             d[j, i] = AA*np.exp(1./2.*np.dot((np.dot((X[j] - v[i]), np.linalg.inv(P[i]))), X[j] - v[i]))
+            #d[j, i] = AA * exp(1. / 2. * np.dot((np.dot((X[j] - v[i]),A)), X[j] - v[i]))
+            # d[j,i] = sqrt(1./sqrt(np.linalg.det(np.linalg.pinv(P[i])))*1./Pi[i]*exp((1./2.)*np.dot(np.dot(X[j] - v[i], np.linalg.inv(P[i])),X[j] - v[i])))
+        #B = np.exp(1./2*np.dot(pow(np.linalg.det(P[i]),1.0/n),np.linalg.pinv(P[i])))
+        # Calculate the distances:
         #AA = 1/pow(np.linalg.det(np.linalg.pinv(F[i])),n/2.)*1/a[i]  #meg kell nézni
-        A = sqrt(np.linalg.det(np.linalg.pinv(P[i])))/Pi[i]
-        d[i] = A*B
+        #A = sqrt(np.linalg.det(np.linalg.pinv(P[i])))/Pi[i]
+
+        # d[:,i] =
         #for j in range(N):        
             #D[j,i] = A*np.exp(1/2.*np.sum(np.dot(np.dot((X-C[i]),np.linalg.pinv(F[i])) , (X-C[i]).T)))
-    #Update the partition matrix:
+    # Update the partition matrix:
     for i in range(N):
-        tmp = d[i]  #Create a Distance matrix from D[i] 1-D vector
+        tmp = d[i]  # Create a Distance matrix from D[i] 1-D vector
         tmp = np.repeat(tmp,c)
         tmp = tmp.reshape((c,c))
         f_new[i] = 1.0/np.dot(pow(tmp,2.0/(m-1)),pow(1.0/d[i],2.0/(m-1)))
 
-        
+
     if np.linalg.norm(f-f_new) < e:
-        break   #If the distance between current U and U in the previous iteration is under terminate tolerance, halt
+        break   # If the distance between current U and U in the previous iteration is under terminate tolerance, halt
     f = np.copy(f_new)
-    run += 1    
+    run += 1
 
 #Plot
 fig = plt.figure("GathGeva Clustering - "+str(c)+" clusters")
@@ -81,4 +86,4 @@ for i in range(N):
 for i in range(c):
     adat.scatter(v[i][0], v[i][1], v[i][2], s = 400, marker = '+')
 
-plt.show()   
+plt.show()
