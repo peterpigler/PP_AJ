@@ -33,7 +33,7 @@ for i in range(c):
 #Iterate
 run = 0
 while True and run != 20:
-    #Calculate each points' belongings 
+    #Calculate each points' belongings
     for i in range(c):
         d[:,i] = np.apply_along_axis(np.linalg.norm,1,X-v[i])
     f_new = np.argmin(d, axis=1)
@@ -47,7 +47,7 @@ while True and run != 20:
             tmp_d = np.linalg.norm(X[np.where(f_new == i)]-avg, axis = 1)
             v[i] = X[np.argmin(tmp_d)]
         else:
-            v[i] = avg
+            v[i] = X[0]
     if np.linalg.norm(f-f_new) < e:
         break   #If the distance between current partition vector (f_new) and previously iterated p. vector (f) is under terminate tolerance, halt
     f=np.copy(f_new)

@@ -41,7 +41,7 @@ while True and run != 20:
         if np.size(d[np.where(f_new == i)]):
             v[i] = np.mean(X[np.where(f_new == i)], axis = 0)
         else:
-            v[i] = np.zeros_like(v[i])
+            v[i] = np.mean(X, axis = 0)
     if np.linalg.norm(f-f_new) < e:
         break   #If the distance between current partition vector (f_new) and previously iterated p. vector (f) is under terminate tolerance, halt
     f=np.copy(f_new)
