@@ -25,7 +25,7 @@ def gkclust(Data, Param):
     else:
 
 
-    X = Data.X
+     X = Data.X
     [N, n] = map(int, X.shape)
 
     f = np.zeros((N, c))
