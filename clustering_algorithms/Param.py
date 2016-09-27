@@ -7,3 +7,4 @@ gamma = 1
 val = 1
 max = 100
 alpha = 0.4
+vis = False
