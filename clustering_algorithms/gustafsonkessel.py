@@ -22,10 +22,10 @@ def gkclust(Data, Param):
     if 'e' in dir(Param):   e = Param.e
     else:   e = 0.001
     if "ro" in dir(Param):  ro = Param.e
-    else:
+    else:   ro = np.ones((1,c))
 
 
-     X = Data.X
+    X = Data.X
     [N, n] = map(int, X.shape)
 
     f = np.zeros((N, c))
@@ -67,6 +67,23 @@ def gkclust(Data, Param):
         f = np.copy(f_new)
         run += 1
 
+    fm = pow(f_new,m)
+    P = np.zeros((c, n, n))
+    M = np.copy(P)
+    V = np.zeros((c,n))
+    D = np.copy(V)
+
+    for i in range(c):
+        Xf = X - v[i]
+        Xf = np.multiply(Xf, fm.T[i][:, np.newaxis])
+        P[i] = np.cov(Xf.T)
+
+        ev, ed = np.linalg.eig(P[i])
+        V[i] = ev
+        D[i] = np.diag(ed)
+
+    result = {"Data": {"d": d, "f": f}, "Cluster": {"v": v, "P": P, "M": M, "V": V, "D": D}, "iter": run, "cost": 0}
+
     # Plot
     if Param.vis:
         fig = plt.figure("GKclust - " + str(c) + " clusters")
@@ -81,4 +98,4 @@ def gkclust(Data, Param):
         plt.show()
 
 
-gkclust()
+gkclust(Data, Param)
