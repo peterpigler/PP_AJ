@@ -5,8 +5,11 @@
 @author: Peter Pigler
 """
 
-import Param
-import Data
+import init
+
+Data = init.data
+Param = init.param
+
 from gathgeva import ggclust
 from gustafsonkessel import gkclust
 from fuzzycmeans import fcmclust

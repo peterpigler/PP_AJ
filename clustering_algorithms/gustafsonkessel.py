@@ -9,8 +9,6 @@ from random import randint
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from math import sqrt
-import Param
-import Data
 
 
 def gkclust(Data, Param):

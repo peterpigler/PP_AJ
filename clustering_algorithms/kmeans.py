@@ -67,7 +67,6 @@ def kmeans(Data, Param):
 
     return result
 
-kmeans(Data, Param)
 
 
 

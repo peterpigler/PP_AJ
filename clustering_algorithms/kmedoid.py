@@ -74,5 +74,4 @@ def kmedoid(Data, Param):
             adat.scatter(v[i][0], v[i][1], v[i][2], c=colors[i], s=400)
         plt.show()
 
-
-kmedoid(Data, Param)
+    return result

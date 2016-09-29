@@ -8,15 +8,13 @@ import numpy as np
 from random import randint
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
-import Param
-import Data
 
 
 def fcmclust(Data, Param):
-    c = Param.c
-    m = Param.m
-    e = Param.e
-    X = Data.X
+    c = Param["c"]
+    m = Param["m"]
+    e = Param["e"]
+    X = Data["X"]
     [N, n] = map(int, X.shape)
     f = np.zeros((N, c))
     f_new = np.zeros_like(f)  # f partition matrix in next iteration
@@ -54,7 +52,7 @@ def fcmclust(Data, Param):
     result = {"Data": {"d": d, "f": f}, "Cluster": {"v": v}, "iter": run, "cost": 0}
 
     # Plot
-    if Param.vis:
+    if Param["vis"]:
         fig = plt.figure("FCMclust - " + str(c) + " clusters")
         adat = fig.add_subplot(111, projection='3d')
         adat.set_xlabel("Axis X")

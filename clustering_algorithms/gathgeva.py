@@ -125,4 +125,4 @@ def ggclust(Data, Param):
             adat.scatter(v[i][0], v[i][1], v[i][2], s = 400, marker = '+')
         plt.show()
 
-ggclust(Data, Param)
+    return result
