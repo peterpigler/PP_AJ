@@ -9,8 +9,6 @@ from random import randint
 from math import pi, sqrt, exp
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
-import Param
-import Data
 
 
 def ggclust(Data, Param):
