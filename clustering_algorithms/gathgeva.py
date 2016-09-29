@@ -46,7 +46,7 @@ def ggclust(Data, Param):
     d = pow(d, -1.0 / (m - 1))
     run = 0
     P = np.zeros((c, n, n))  # covariance matrix
-    while True and (run != 20):
+    while True and (run != 1):
 
         # Update the partition matrix:
         for i in range(N):
@@ -125,8 +125,6 @@ def ggclust(Data, Param):
             adat.scatter(X[i][0], X[i][1], X[i][2], c = tuple(f[i]), s = 80)
         for i in range(c):
             adat.scatter(v[i][0], v[i][1], v[i][2], s = 400, marker = '+')
-
         plt.show()
-
 
 ggclust(Data, Param)

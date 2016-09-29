@@ -97,5 +97,4 @@ def gkclust(Data, Param):
             adat.scatter(v[i][0], v[i][1], v[i][2], s=300, alpha=0.6, c="white")
         plt.show()
 
-
-gkclust(Data, Param)
+    return result
