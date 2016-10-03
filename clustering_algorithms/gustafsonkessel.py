@@ -5,7 +5,6 @@
 @author: Peter Pigler
 """
 import numpy as np
-from random import randint
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from math import sqrt
@@ -13,26 +12,52 @@ from math import sqrt
 
 def gkclust(Data, Param):
 
-    if  'c' in dir(Param):  c = Param.c
-    else:   c = 6
-    if 'm' in dir(Param):   m = Param.m
+
+    # Checking if the parameters are given
+    if Param.has_key('c'):  c = Param['c']
+    else:   c = 3
+    if Param.has_key('m'):   m = Param['m']
     else:   m = 2
-    if 'e' in dir(Param):   e = Param.e
+    if Param.has_key('e'):   e = Param['e']
     else:   e = 0.001
-    if "ro" in dir(Param):  ro = Param.e
+    if Param.has_key("ro"):  ro = Param["ro"]
     else:   ro = np.ones((1,c))
+    if Param.has_key("gamma") : gamma = Param["gamma"]
+    else:   gamma = 0
+    if Param.has_key("beta"): beta = Param["beta"]
+    else:   beta = 1e15;
 
-
-    X = Data.X
+    X = Data['X']
     [N, n] = map(int, X.shape)
 
-    f = np.zeros((N, c))
-    f_new = np.zeros_like(f)
+    f_new = np.zeros((N, c))
+    f = np.copy(f_new)
     d = np.zeros_like(f)
     v = np.zeros((c, n))
-    # Initialize Partition matrix randomly
-    for i in range(N):
-        f[i][randint(0, c - 1)] = 1
+
+    # Checking if cluster parameters are given
+    if Data.has_key('v'):
+        v = Data['v']
+        if Data.has_key('d'):
+            d = Data['d']
+        else:
+            # Initialize distance matrix
+            for i in range(c):
+                d[:, i] = np.apply_along_axis(np.linalg.norm, 1, X - v[i])
+    else:
+        # Initialize clusters
+        mM = np.max(X, axis=0)
+        mm = np.min(X, axis=0)
+        v = ((mM - mm) * np.random.random_sample(c, n)) + mm
+    if Data.has_key('f'):
+        f = Data['f']
+    else:
+        for i in range(N):
+            tmp = d[i]  # Create a Distance matrix from d[i] 1-D vector
+            tmp = np.repeat(tmp, c)
+            tmp = tmp.reshape((c, c))
+            f[i] = 1.0 / np.dot(pow(tmp, 2.0 / (m - 1)), pow(1.0 / d[i], 2.0 / (m - 1)))
+
     run = 0
     while True and (run != 20):
         fm = pow(f, m)
@@ -80,10 +105,11 @@ def gkclust(Data, Param):
         V[i] = ev
         D[i] = np.diag(ed)
 
+    # result outputs
     result = {"Data": {"d": d, "f": f}, "Cluster": {"v": v, "P": P, "M": M, "V": V, "D": D}, "iter": run, "cost": 0}
 
     # Plot
-    if Param.vis:
+    if Param["vis"]:
         fig = plt.figure("GKclust - " + str(c) + " clusters")
         adat = fig.add_subplot(111, projection='3d')
         adat.set_xlabel("Axis X")

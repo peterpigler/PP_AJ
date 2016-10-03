@@ -8,11 +8,14 @@ import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from random import randint
-import Param
-import Data
 
 
 def kmeans(Data, Param):
+
+    c = Param["c"]
+    m = Param["m"]
+    e = Param["e"]
+    X = Data["X"]
 
     if  'c' in dir(Param):  c = Param.c
     else:   c = 6

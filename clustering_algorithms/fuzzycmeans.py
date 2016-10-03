@@ -11,10 +11,19 @@ import matplotlib.pyplot as plt
 
 
 def fcmclust(Data, Param):
-    c = Param["c"]
-    m = Param["m"]
-    e = Param["e"]
-    X = Data["X"]
+
+
+    if  Param.has_key('c'):  c = Param['c']
+    else:   c = 3
+    if Param.has_key('m'):   m = Param['m']
+    else:   m = 2
+    if Param.has_key('e'):   e = Param['e']
+    else:   e = 0.001
+    if Param.has_key("ro"):  ro = Param["ro"]
+    else:   ro = np.ones((1,c))
+
+
+    X = Data['X']
     [N, n] = map(int, X.shape)
     f = np.zeros((N, c))
     f_new = np.zeros_like(f)  # f partition matrix in next iteration

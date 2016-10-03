@@ -9,20 +9,21 @@ from random import randint
 from random import random
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
-import Param
-import Data
 
 
 def kmedoid(Data, Param):
 
-    if  'c' in dir(Param):  c = Param.c
-    else:   c = 6
-    if 'm' in dir(Param):   m = Param.m
-    else:   m = 2
-    if 'e' in dir(Param):   e = Param.e
-    else:   e = 0.001
 
-    X = Data.X
+    if  Param.has_key('c'):  c = Param['c']
+    else:   c = 6
+    if Param.has_key('m'):   m = Param['m']
+    else:   m = 2
+    if Param.has_key('e'):   e = Param['e']
+    else:   e = 0.001
+    if Param.has_key("ro"):  ro = Param["ro"]
+    else:   ro = np.ones((1,c))
+
+    X = Data['X']
     [N, n] = map(int, X.shape)
 
     f = np.zeros_like(X.T[0])

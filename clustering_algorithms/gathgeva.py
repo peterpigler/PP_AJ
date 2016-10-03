@@ -13,19 +13,34 @@ import matplotlib.pyplot as plt
 
 def ggclust(Data, Param):
 
-    if  'c' in dir(Param):  c = Param.c
-    else:   c = 6
-    if 'm' in dir(Param):   m = Param.m
-    else:   m = 2
-    if 'e' in dir(Param):   e = Param.e
-    else:   e = 0.001
 
-    X = Data.X
+    if  Param.has_key('c'):  c = Param['c']
+    else:   c = 6
+    if Param.has_key('m'):   m = Param['m']
+    else:   m = 2
+    if Param.has_key('e'):   e = Param['e']
+    else:   e = 0.001
+    if Param.has_key("ro"):  ro = Param["ro"]
+    else:   ro = np.ones((1,c))
+
+
+    X = Data['X']
     [N, n] = map(int, X.shape)
+    v = np.zeros((c, n))
     f = np.zeros((N, c))
     f_new = np.zeros_like(f)  # f partition matrix in next iteration
     d = np.zeros_like(f)
-    v = np.zeros((c, n))
+    if Data.has_key('v'):
+        v = Data['v']
+        if Data.has_key['d']:
+            d = Data['d']
+        else:
+            for i in range(c):
+                d[:, i] = np.apply_along_axis(np.linalg.norm, 1, X - v[i])
+    else:
+        mM = np.max(X, axis=0)
+        mm = np.min(X, axis=0)
+        v = ((mM - mm) * np.random.random_sample(c, n)) + mm
     # Initialize Partition matrix randomly
     for i in range(N):
         f[i][randint(0, c - 1)] = 1
