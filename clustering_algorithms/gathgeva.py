@@ -57,15 +57,8 @@ def ggclust(Data, Param):
 
     while True and (run != 1):
 
-        # Update the partition matrix:
-        for i in range(N):
-            tmp = d[i]
-            tmp = np.repeat(tmp, c)
-            tmp = tmp.reshape((c, c))
-            f[i] = 1.0 / np.dot(pow(tmp, 2.0 / (m - 1)), pow(1.0 / d[i], 2.0 / (m - 1)))
-        f[np.isnan(f)] = 1
-        # Calculate cluster prototypes:
         fm = pow(f, m)
+        # Calculate cluster prototypes:
         for i in range(c):
             v[i] = np.average(X, axis=0, weights=fm.T[i])
 

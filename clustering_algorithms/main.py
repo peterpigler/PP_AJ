@@ -26,6 +26,7 @@ Data['P'] = GKclust["Cluster"]['P']
 Data['M'] = GKclust["Cluster"]['M']
 Data['V'] = GKclust["Cluster"]['V']
 Data['D'] = GKclust["Cluster"]['D']
+GGclust = ggclust(Data, Param)
 
 
 
