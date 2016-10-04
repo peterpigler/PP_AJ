@@ -76,23 +76,7 @@ def ggclust(Data, Param):
             ddd = np.multiply(np.dot(Xv,np.linalg.pinv(P[i])),Xv)
             # d[:,i] = 1.0/(pow(np.linalg.det(np.linalg.pinv(P[i])),1.0/2.0))*1.0/Pi[i]*np.exp(1./2.*np.sum(np.multiply(np.dot(Xv,np.linalg.pinv(P[i])),Xv),axis = 1))
             d[:,i] = aaa*bbb*np.exp(ccc)
-            """
-            # A = np.dot(pow(np.linalg.det(P[i]), 1.0 / n), np.linalg.inv(P[i]))
-            AA = 1 / pow(np.linalg.det(np.linalg.pinv(P[i])), n / 2.) * 1 / Pi[i]  # meg kell nézni
-            A = np.dot(pow(np.linalg.det(P[i]), 1.0 / n), np.linalg.inv(P[i]))
-            for j in range(N):
-                # d[j, i] = AA*np.exp(1./2.*np.dot((np.dot((X[j] - v[i]), np.linalg.inv(P[i]))), X[j] - v[i]))
-                d[j, i] = AA * exp(1. / 2. * np.dot((np.dot((X[j] - v[i]), A)), X[j] - v[i]))
-                # d[j,i] = sqrt(1./sqrt(np.linalg.det(np.linalg.pinv(P[i])))*1./Pi[i]*exp((1./2.)*np.dot(np.dot(X[j] - v[i], np.linalg.inv(P[i])),X[j] - v[i])))
-                # B = np.exp(1./2*np.dot(pow(np.linalg.det(P[i]),1.0/n),np.linalg.pinv(P[i])))
-                # Calculate the distances:
-                # AA = 1/pow(np.linalg.det(np.linalg.pinv(F[i])),n/2.)*1/a[i]  #meg kell nézni
-                # A = sqrt(np.linalg.det(np.linalg.pinv(P[i])))/Pi[i]
 
-                # d[:,i] =
-                # for j in range(N):
-                # D[j,i] = A*np.exp(1/2.*np.sum(np.dot(np.dot((X-C[i]),np.linalg.pinv(F[i])) , (X-C[i]).T)))
-            """
         # Update the partition matrix:
         for i in range(N):
             tmp = d[i]  # Create a Distance matrix from D[i] 1-D vector
@@ -120,12 +104,12 @@ def ggclust(Data, Param):
         V[i] = ev
         D[i] = np.diag(ed)
 
-    result = {"Data": {"d": d, "f": f}, "Cluster": {"v": v, "P": P, "M": M, "V": V, "D": D}, "iter": run, "cost": 0}
+    result = {"Data": {"d": sqrt(d), "f": f}, "Cluster": {"v": v, "P": P, "M": M, "V": V, "D": D}, "iter": run, "cost": 0}
 
     # Plot
     if Param["vis"]:
         #Plot
-        fig = plt.figure("GathGeva Clustering - "+str(c)+" clusters")
+        fig = plt.figure("GGclust - "+str(c)+" clusters")
         adat = fig.add_subplot(111,projection='3d')
         adat.set_xlabel("Axis X")
         adat.set_ylabel("Axis Y")
@@ -133,7 +117,7 @@ def ggclust(Data, Param):
         for i in range(N):
             adat.scatter(X[i][0], X[i][1], X[i][2], c = tuple(f[i]), s = 80)
         for i in range(c):
-            adat.scatter(v[i][0], v[i][1], v[i][2], s = 400, marker = '+')
+            adat.scatter(v[i][0], v[i][1], v[i][2], s=300, alpha=0.6, c="white")
         plt.show()
 
     return result
