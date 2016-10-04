@@ -15,21 +15,21 @@ def ggclust(Data, Param):
 
 
     if  Param.has_key('c'):  c = Param['c']
-    else:   c = 6
+    else:   c = 3
     if Param.has_key('m'):   m = Param['m']
     else:   m = 2
     if Param.has_key('e'):   e = Param['e']
     else:   e = 0.001
-    if Param.has_key("ro"):  ro = Param["ro"]
-    else:   ro = np.ones((1,c))
-
 
     X = Data['X']
     [N, n] = map(int, X.shape)
-    v = np.zeros((c, n))
-    f = np.zeros((N, c))
-    f_new = np.zeros_like(f)  # f partition matrix in next iteration
+
+    f_new = np.zeros((N, c))
+    f = np.copy(f_new)
     d = np.zeros_like(f)
+    v = np.zeros((c, n))
+
+    # Checking if cluster parameters are given
     if Data.has_key('v'):
         v = Data['v']
         if Data.has_key['d']:
@@ -41,24 +41,20 @@ def ggclust(Data, Param):
         mM = np.max(X, axis=0)
         mm = np.min(X, axis=0)
         v = ((mM - mm) * np.random.random_sample(c, n)) + mm
-    # Initialize Partition matrix randomly
-    for i in range(N):
-        f[i][randint(0, c - 1)] = 1
 
-    mm = np.mean(X, axis=0)
-    aa = np.max(np.abs(X - mm), axis = 0)
-    for i in range(c):
-        # v[i] = X[randint(0, N - 1)]
-        v[i] = (np.random.rand(1,n)-0.5)*mm
-        # while not v[np.where(v == v[i])].all():
-            # v[i] = X[randint(0, N - 1)]
+    if Data.has_key('f'):
+        f = Data['f']
+    else:
+        for i in range(N):
+            tmp = d[i]  # Create a Distance matrix from d[i] 1-D vector
+            tmp = np.repeat(tmp, c)
+            tmp = tmp.reshape((c, c))
+            f[i] = 1.0 / np.dot(pow(tmp, 2.0 / (m - 1)), pow(1.0 / d[i], 2.0 / (m - 1)))
 
-
-    for i in range(c):
-        d[:, i] = np.apply_along_axis(np.linalg.norm, 1, X - v[i])
-    d = pow(d, -1.0 / (m - 1))
-    run = 0
     P = np.zeros((c, n, n))  # covariance matrix
+
+    run = 0
+
     while True and (run != 1):
 
         # Update the partition matrix:
