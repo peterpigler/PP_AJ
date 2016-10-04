@@ -18,6 +18,6 @@ gamma = 1
 val = 1
 max = 100
 alpha = 0.4
-vis = False
+vis = True
 
 param = {"c" : c, "m" : m, "e" : e, "ro" : ro, "vis" : vis, "gamma" : gamma, "val" : val, "max" : max, "alpha" : alpha, "vis" : vis}

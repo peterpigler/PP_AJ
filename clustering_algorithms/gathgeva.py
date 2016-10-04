@@ -32,7 +32,7 @@ def ggclust(Data, Param):
     # Checking if cluster parameters are given
     if Data.has_key('v'):
         v = Data['v']
-        if Data.has_key['d']:
+        if Data.has_key('d'):
             d = Data['d']
         else:
             for i in range(c):
@@ -55,7 +55,7 @@ def ggclust(Data, Param):
 
     run = 0
 
-    while True and (run != 1):
+    while True and (run != 10):
 
         fm = pow(f, m)
         # Calculate cluster prototypes:
@@ -64,13 +64,19 @@ def ggclust(Data, Param):
 
         # Calculate prior probability
         Pi = 1.0 / N * fm.sum(axis=0)  # gives prior probability of selecting i-th cluster
-
+        d = np.zeros_like(d)
         # Calculate F covariance matrix, weighted by U
         for i in range(c):
-            # np.fill_diagonal(P[i],1)
-            Xf = X - v[i]
-            Xf = np.multiply(Xf, fm.T[i][:, np.newaxis])
-            P[i] = np.cov(Xf.T)
+            Xv = X - v[i]
+            Xf = np.multiply(Xv, fm.T[i][:, np.newaxis])
+            P[i] = np.cov(Xv.T)
+            aaa = 1.0/(pow(np.linalg.det(np.linalg.pinv(P[i])),1.0/2.0))
+            bbb = 1.0/Pi[i]
+            ccc = 1./2.*np.sum(np.multiply(np.dot(Xv,np.linalg.pinv(P[i])),Xv),axis = 1)
+            ddd = np.multiply(np.dot(Xv,np.linalg.pinv(P[i])),Xv)
+            # d[:,i] = 1.0/(pow(np.linalg.det(np.linalg.pinv(P[i])),1.0/2.0))*1.0/Pi[i]*np.exp(1./2.*np.sum(np.multiply(np.dot(Xv,np.linalg.pinv(P[i])),Xv),axis = 1))
+            d[:,i] = aaa*bbb*np.exp(ccc)
+            """
             # A = np.dot(pow(np.linalg.det(P[i]), 1.0 / n), np.linalg.inv(P[i]))
             AA = 1 / pow(np.linalg.det(np.linalg.pinv(P[i])), n / 2.) * 1 / Pi[i]  # meg kell nézni
             A = np.dot(pow(np.linalg.det(P[i]), 1.0 / n), np.linalg.inv(P[i]))
@@ -86,6 +92,7 @@ def ggclust(Data, Param):
                 # d[:,i] =
                 # for j in range(N):
                 # D[j,i] = A*np.exp(1/2.*np.sum(np.dot(np.dot((X-C[i]),np.linalg.pinv(F[i])) , (X-C[i]).T)))
+            """
         # Update the partition matrix:
         for i in range(N):
             tmp = d[i]  # Create a Distance matrix from D[i] 1-D vector
@@ -116,7 +123,7 @@ def ggclust(Data, Param):
     result = {"Data": {"d": d, "f": f}, "Cluster": {"v": v, "P": P, "M": M, "V": V, "D": D}, "iter": run, "cost": 0}
 
     # Plot
-    if Param.vis:
+    if Param["vis"]:
         #Plot
         fig = plt.figure("GathGeva Clustering - "+str(c)+" clusters")
         adat = fig.add_subplot(111,projection='3d')
