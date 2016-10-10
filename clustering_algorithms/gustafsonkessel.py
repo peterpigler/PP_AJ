@@ -92,7 +92,6 @@ def gkclust(Data, Param):
 
     fm = pow(f_new,m)
     P = np.zeros((c, n, n))
-    M = np.copy(P)
     V = np.zeros((c,n))
     D = np.copy(V)
 
@@ -106,7 +105,7 @@ def gkclust(Data, Param):
         D[i] = np.diag(ed)
 
     # result outputs
-    result = {"Data": {"d": d, "f": f}, "Cluster": {"v": v, "P": P, "M": M, "V": V, "D": D}, "iter": run, "cost": 0}
+    result = {"Data": {"d": d, "f": f}, "Cluster": {"v": v, "P": P, "V": V, "D": D}, "iter": run, "cost": 0}
 
     # Plot
     if Param["vis"]:

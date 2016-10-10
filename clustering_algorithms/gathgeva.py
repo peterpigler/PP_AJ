@@ -91,7 +91,7 @@ def ggclust(Data, Param):
 
     fm = pow(f_new, m)
     P = np.zeros((c, n, n))
-    M = np.copy(P)
+    Pi = 1.0 / N * fm.sum(axis=0)
     V = np.zeros((c, n))
     D = np.copy(V)
 
@@ -104,7 +104,7 @@ def ggclust(Data, Param):
         V[i] = ev
         D[i] = np.diag(ed)
 
-    result = {"Data": {"d": sqrt(d), "f": f}, "Cluster": {"v": v, "P": P, "M": M, "V": V, "D": D}, "iter": run, "cost": 0}
+    result = {"Data": {"d": sqrt(d), "f": f}, "Cluster": {"v": v, "P": P, "Pi": Pi, "V": V, "D": D}, "iter": run, "cost": 0}
 
     # Plot
     if Param["vis"]:
