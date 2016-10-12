@@ -105,7 +105,7 @@ def gkclust(Data, Param):
         D[i] = np.diag(ed)
 
     # result outputs
-    result = {"Data": {"d": d, "f": f}, "Cluster": {"v": v, "P": P, "V": V, "D": D}, "iter": run, "cost": 0}
+    result = {"Data": {'d': d, 'f': f}, "Cluster": {'v': v, 'P': P, 'V': V, 'D': D}, "iter": run, "cost": 0}
 
     # Plot
     if Param["vis"]:

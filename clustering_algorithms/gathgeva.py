@@ -104,7 +104,7 @@ def ggclust(Data, Param):
         V[i] = ev
         D[i] = np.diag(ed)
 
-    result = {"Data": {"d": sqrt(d), "f": f}, "Cluster": {"v": v, "P": P, "Pi": Pi, "V": V, "D": D}, "iter": run, "cost": 0}
+    result = {"Data": {"d": np.sqrt(d), "f": f}, "Cluster": {"v": v, "P": P, "Pi": Pi, "V": V, "D": D}, "iter": run, "cost": 0}
 
     # Plot
     if Param["vis"]:

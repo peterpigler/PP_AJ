@@ -10,13 +10,13 @@ from math import sqrt
 
 def clusteval(New, Result, Param):
     # load Parameters
-    v = Result["Cluster"]['V']
+    v = Result["Cluster"]['v']
     c = Param['c']
     if Param.has_key('m'):
         m = Param['m']
     else:
         m = 2
-    X = New.X
+    X = New['X']
     [N, n] = map(int, X.shape)
     d = np.zeros((N, c))
     f0 = np.zeros_like(d)
