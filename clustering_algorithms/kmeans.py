@@ -69,11 +69,3 @@ def kmeans(Data, Param):
         plt.show()
 
     return result
-
-
-
-
-
-
-
-
