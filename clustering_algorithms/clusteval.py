@@ -82,14 +82,14 @@ def clusteval(New, Result, Param):
         upper2 = np.max(X[:, 2])
         scale2 = (upper2 - lower2) / 200.00
         [x, y] = np.meshgrid(range(lower1, upper1, scale1), range(lower2, upper2, scale2))
-        pair = [x[:], y[:]]
+        pair = np.array([x[:], y[:]])
         [pair1, pair2] = np.size(pair)
         X1 = np.ones(pair1, 1)
         d = np.zeros(pair1, c)
 
         if Result["Cluster"].has_key('Pi'):  # GGclust
             for i in range(c):
-                Xv = X - v[i]
+                Xv = pair - v[i]    # - sub list -> array(pair)
                 Xf = np.multiply(Xv, fm.T[i][:, np.newaxis])
                 aaa = 1.0 / (pow(np.linalg.det(np.linalg.pinv(A[i])), 1.0 / 2.0))
                 bbb = 1.0 / Pi[i]
@@ -97,7 +97,7 @@ def clusteval(New, Result, Param):
                 ddd = np.multiply(np.dot(Xv, np.linalg.pinv(A[i])), Xv)
                 # d[:,i] = 1.0/(pow(np.linalg.det(np.linalg.pinv(P[i])),1.0/2.0))*1.0/Pi[i]*np.exp(1./2.*np.sum(np.multiply(np.dot(Xv,np.linalg.pinv(P[i])),Xv),axis = 1))
                 d[:, i] = aaa * bbb * np.exp(ccc)
-            distout = sqrt(d)
+
             if m > 1:
                 d = (d + 1e-10) ^ (-1 / (m - 1))
             else:
