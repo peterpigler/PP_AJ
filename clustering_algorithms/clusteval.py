@@ -43,7 +43,6 @@ def clusteval(New, Result, Param):
             f0[i] = 1.0 / np.dot(pow(tmp, 2.0 / (m - 1)), pow(1.0 / d[i], 2.0 / (m - 1)))
 
     elif Result["Cluster"].has_key('P'):  # GK
-        print "GK"
         P = np.zeros((c, n, n))
         for i in range(c):
             d[:, i] = np.apply_along_axis(np.linalg.norm, 1, X - v[i])
@@ -107,4 +106,22 @@ def clusteval(New, Result, Param):
             tmp = tmp.reshape((c, c))
             f0[i] = 1.0 / np.dot(pow(tmp, 2.0 / (m - 1)), pow(1.0 / d[i], 2.0 / (m - 1)))
 
+        elif Result["Cluster"].has_key('P'):  # GK
+            P = np.zeros((c, n, n))
+            for i in range(c):
+                d[:, i] = np.apply_along_axis(np.linalg.norm, 1, pair - v[i])
+            for i in range(N):
+                tmp = d[i]  # Create a Distance matrix from d[i] 1-D vector
+                tmp = np.repeat(tmp, c)
+                tmp = tmp.reshape((c, c))
+                f0[i] = 1.0 / np.dot(pow(tmp, 2.0 / (m - 1)), pow(1.0 / d[i], 2.0 / (m - 1)))
+            fm = pow(f0, m)
+            for i in range(c):
+                Xf = pair - v[i]
+                Xf = np.multiply(Xf, fm.T[i][:, np.newaxis])
+                P[i] = np.cov(Xf.T)
+            for i in range(c):
+                A = np.dot(pow(np.linalg.det(P[i]), 1.0 / n), np.linalg.inv(P[i]))
+                for j in range(N):
+                    d[j, i] = sqrt(np.dot((np.dot((pair[j] - v[i]), A)), pair[j] - v[i]))
     return eval
