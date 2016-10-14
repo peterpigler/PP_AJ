@@ -6,6 +6,7 @@
 """
 import numpy as np
 from math import sqrt
+import matplotlib.pyplot as plt
 
 
 def clusteval(New, Result, Param):
@@ -124,4 +125,22 @@ def clusteval(New, Result, Param):
                 A = np.dot(pow(np.linalg.det(P[i]), 1.0 / n), np.linalg.inv(P[i]))
                 for j in range(N):
                     d[j, i] = sqrt(np.dot((np.dot((pair[j] - v[i]), A)), pair[j] - v[i]))
+
+        else:   # FCM
+            for i in range(c):
+                d[:, i] = np.apply_along_axis(np.linalg.norm, 1, pair - v[i])
+            for i in range(N):
+                tmp = d[i]  # Create a Distance matrix from d[i] 1-D vector
+                tmp = np.repeat(tmp, c)
+                tmp = tmp.reshape((c, c))
+                f0[i] = 1.0 / np.dot(pow(tmp, 2.0 / (m - 1)), pow(1.0 / d[i], 2.0 / (m - 1)))
+
+        f = np.max(f0.T).T
+        Z = np.reshape(f,np.size(x,axis = 0), np.size(x,axis = 1))
+
+    plt.figure()
+    CS = plt.contour(x, y, Z)
+    plt.title("Contour plot")
+    plt.show()
+
     return eval
