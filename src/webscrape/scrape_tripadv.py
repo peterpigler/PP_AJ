@@ -1,10 +1,11 @@
+# coding=utf-8
 from bs4 import BeautifulSoup
 import urllib2
 import numpy
 import pandas
 
 HOTELTYPES = ["Best Value","Boutique","Budget","Business","Charming","Classic","Family-friendly","Luxury","Mid-range", "Quaint", "Quiet", "Romantic","Trendy"]
-PRICERANGE = ['£',"££ - £££","££££"]
+PRICERANGE = [u'£',u"££ - £££",u"££££"]
 
 def city_scrape(_city,filename):
 
@@ -146,7 +147,7 @@ def city_scrape(_city,filename):
 
     restaurants = [[],[],[],[]]
     try:
-        request = urllib2.Request("https://www.tripadvisor.com/Restaurants-"+_city+".html", headers=headers)
+        request = urllib2.Request("https://www.tripadvisor.co.uk/Restaurants-"+_city+".html", headers=headers)
         soup = BeautifulSoup(urllib2.urlopen(request).read(), "html.parser")
     except:
         return
@@ -162,7 +163,7 @@ def city_scrape(_city,filename):
             except: _rating = -1.0
             _price = -1
             try:
-                rangetag = str(restaurant.find("span", {"class", "price_range"}).text)
+                rangetag = restaurant.find("span", {"class", "price_range"}).text.replace('\n','')
                 if rangetag in PRICERANGE:
                     _price = PRICERANGE.index(rangetag)
             except:
@@ -176,7 +177,7 @@ def city_scrape(_city,filename):
 
         nextpage = soup.find("a", {"class":"nav next rndBtn ui_button primary taLnk"})
         if nextpage:
-            _next = "https://www.tripadvisor.com/"+str(nextpage["href"])
+            _next = "https://www.tripadvisor.co.uk/"+str(nextpage["href"])
             request = urllib2.Request(_next, headers=headers)
             soup = BeautifulSoup(urllib2.urlopen(request).read(), "html.parser")
         else:
