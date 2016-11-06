@@ -7,7 +7,8 @@
 """
 import pandas
 
-from scrapeTripInfo import scrapeOverview, scrapeAccommodations, scrapeAttractions, scrapeRestaurants, getAccommodationFeatures, getUserAccommodationReviews
+from scrapeTripInfo import scrapeOverview, scrapeAccommodations, scrapeAttractions, scrapeRestaurants, \
+    getAccommodationFeatures, getUserAccommodationReviews, getUserRestaurantReviews
 from listGenerate import findCityList
 
 def scrapeCity(_city, filename):
@@ -17,19 +18,27 @@ def scrapeCity(_city, filename):
     overviews = scrapeOverview(_city)
     overviews.to_excel(writer, sheet_name="Overview")
     # hotels
+    print "....accommodations...."
     hotels = scrapeAccommodations(_city)
     hotels.to_excel(writer, sheet_name="Hotels")
     # accommodation features
+    print "........features...."
     features = getAccommodationFeatures(hotels,_city)
     pandas.DataFrame(features).to_excel(writer, sheet_name="Accommodation Features")
+    print "........users...."
     reviews = getUserAccommodationReviews(hotels,_city)
     reviews.to_excel(writer, sheet_name="Accommodation Reviews")
     # attractions
+    print "....attractions...."
     attractions= scrapeAttractions(_city)
     attractions.to_excel(writer, sheet_name="Attractions")
     # restaurants
+    print "....restaurants...."
     restaurants = scrapeRestaurants(_city)
     restaurants.to_excel(writer, sheet_name="Restaurants")
+    print"........users...."
+    reviews = getUserRestaurantReviews(restaurants, _city)
+    reviews.to_excel(writer, sheet_name="Restaurant Reviews")
 
     writer.save()
     return {"overview": overviews, "hotels": hotels, "restaurants": restaurants, "attractions": attractions}
@@ -39,9 +48,9 @@ def stalkReviewer(filename):
     return
 
 list = findCityList("Hungary")
+print list
 for city in list["city_id"]:
     scrapeCity(city,city+".xlsx")
-
 """
 locations = get_city_list()
 for city in locations:

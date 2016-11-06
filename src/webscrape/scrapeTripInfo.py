@@ -71,49 +71,52 @@ def scrapeAccommodations(_city):
     except:
         return
     counts = soup.find_all("span" ,{"class": "tab_count"})
-    tab_counts = [int(str(counts[0].text).strip("()")),int(str(counts[1].text).strip("()"))]
-    for tab in tab_counts:
-        while True:
-            entities = soup.find_all("div", {"class": "listing easyClear  p13n_imperfect "}, limit = tab)  # find all hotel entities
-            for accommodation in entities:
-                _id = str(accommodation["id"]).split('_')[1]
-                _name = str(accommodation.find('a', {"class": "property_title "}).text).replace('\n','')
-                try:
-                    _reviews = int(
-                        str(accommodation.find("span", {"class": "more review_count"}).text).split(' ', 1)[0].replace(',', ''))
-                except:
-                    _reviews = -1
-                try:
-                    _rating = float(str(accommodation.find("img", {"class": "sprite-ratings"})["alt"]).split(' ', 1)[0])
-                except:
-                    _rating = -1.0
-                _category = -1
-                try:
-                    tags = accommodation.find_all('a', {"class": "tag"})
-                    for tag in tags:
-                        if str(tag.text) in HOTELTYPES:
-                            _category = HOTELTYPES.index(str(tag.text))
-                except:
-                    pass
-                try:
-                    accommodations[0].append(_id)
-                    accommodations[1].append(_name)
-                    accommodations[2].append(_reviews)
-                    accommodations[3].append(_rating)
-                    accommodations[4].append(_category)
-                except:
-                    pass
+    if len(counts):
+        tab_counts = [int(str(counts[0].text).strip("()")),int(str(counts[1].text).strip("()"))]
+        for tab in tab_counts:
+            while True:
+                entities = soup.find_all("div", {"class": "listing easyClear  p13n_imperfect "}, limit = tab)  # find all hotel entities
+                for accommodation in entities:
+                    _id = str(accommodation["id"]).split('_')[1]
+                    _name = str(accommodation.find('a', {"class": "property_title "}).text).replace('\n','')
+                    try:
+                        _reviews = int(
+                            str(accommodation.find("span", {"class": "more review_count"}).text).split(' ', 1)[0].replace(',', ''))
+                    except:
+                        _reviews = -1
+                    try:
+                        _rating = float(str(accommodation.find("img", {"class": "sprite-ratings"})["alt"]).split(' ', 1)[0])
+                    except:
+                        _rating = -1.0
+                    _category = -1
+                    try:
+                        tags = accommodation.find_all('a', {"class": "tag"})
+                        for tag in tags:
+                            if str(tag.text) in HOTELTYPES:
+                                _category = HOTELTYPES.index(str(tag.text))
+                    except:
+                        pass
+                    try:
+                        accommodations[0].append(_id)
+                        accommodations[1].append(_name)
+                        accommodations[2].append(_reviews)
+                        accommodations[3].append(_rating)
+                        accommodations[4].append(_category)
+                    except:
+                        pass
 
-            nextpage = soup.find("a", {"class": "nav next ui_button primary taLnk"})
-            if nextpage:
-                _next = soupOpen.TRIPADVISORUK + str(nextpage["href"])
-                try:
-                    soup = soupOpen.open(_next)
-                except:
+                nextpage = soup.find("a", {"class": "nav next ui_button primary taLnk"})
+                if nextpage:
+                    _next = soupOpen.TRIPADVISORUK + str(nextpage["href"])
+                    try:
+                        soup = soupOpen.open(_next)
+                    except:
+                        break
+                else:
                     break
-            else:
-                break
-        soup = soupOpen.open(soupOpen.TRIPADVISORUK + "/Hotels-" + _city + "-c2-Hotels.html")
+            soup = soupOpen.open(soupOpen.TRIPADVISORUK + "/Hotels-" + _city + "-c2-Hotels.html")
+    else:
+        pass
     hotels = numpy.array(accommodations)
     print hotels.T
     dataframe_hotels = {"hotel_id": hotels[0], "hotel_name": hotels[1], "reviews": hotels[2], "ratings": hotels[3], "category": hotels[4]}
@@ -221,6 +224,7 @@ def getUserAccommodationReviews(data_frame, city_id):
     hotel_list = data_frame["hotel_id"].tolist()
     city_users = [[], [], [], [], []]
     for hotel in hotel_list:
+        print "acc_id: "+hotel
         try:    # open hotel_id link
             page = soupOpen.open(soupOpen.TRIPADVISORCOM+"/Hotel_Review-"+city_id+"-d"+hotel+"-Reviews.html")
         except:
@@ -258,10 +262,50 @@ def getUserAccommodationReviews(data_frame, city_id):
     return city_users_dataframe
 
 
+def getUserRestaurantReviews(data_frame, city_id):
+    restaurant_list = data_frame["restaurant_id"].tolist()
+    city_users = [[], [], []]   # 0. restaurant id, 1. user id, 2. rating
+    for restaurant in restaurant_list:
+        print "res id: "+restaurant
+        try:    # open restaurant_id link
+            page = soupOpen.open(soupOpen.TRIPADVISORUK+"/Restaurant_Review-"+city_id+"-d"+restaurant+"-Reviews.html")
+        except:
+            continue
+        while True:
+            reviews = page.find_all("div", {"class": "reviewSelector  "})
+            for review in reviews:
+                try:
+                    city_users[1].append(str(review.find("div",
+                        {"class": "username mo"}).text.encode('utf-8')).replace('\n',''))
+                    city_users[0].append(str(restaurant))
+                    _rating = float(str(review.find("img", {"class": "sprite-rating_s_fill"})["alt"]).split(' ',1)[0])
+                    city_users[2].append(_rating)
+                except:
+                    pass
+            # is next page in _id restaurant?
+            nextpage = page.find("a", {"class": "nav next rndBtn ui_button primary taLnk"})
+            if nextpage:
+                next_page = soupOpen.TRIPADVISORUK+str(nextpage["href"])
+                try:
+                    page = soupOpen.open(next_page)
+                except:
+                    break
+            else:
+                break
+    city_users_dataframe = pandas.DataFrame
+    try:
+        city_users = numpy.array(city_users)
+        city_users = {"restaurant_id": city_users[0], "user": city_users[1], "rating": city_users[2]}
+        city_users_dataframe = pandas.DataFrame(data=city_users)
+    except:
+        pass
+    return city_users_dataframe
+
 def getAccommodationFeatures(data_frame, city_id):
     hotel_list = data_frame["hotel_id"].tolist()
     result = []
     for hotel in hotel_list:
+        print "acc id: "+hotel
         try:    # open hotel_id link
             page = soupOpen.open(soupOpen.TRIPADVISORCOM+"/Hotel_Review-"+city_id+"-d"+hotel+"-Reviews.html")
         except:
