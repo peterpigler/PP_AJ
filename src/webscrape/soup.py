@@ -2,7 +2,11 @@
 # encoding=utf-8
 import urllib2
 from bs4 import BeautifulSoup
+"""
+@lib: Soup
 
+@author: Peter Pigler
+"""
 headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) '
                       'Chrome/23.0.1271.64 Safari/537.11',
@@ -18,6 +22,20 @@ TRIPADVISORUK = "https://www.tripadvisor.co.uk"
 TRIPADVISORHU = "https://www.tripadvisor.co.hu"
 
 def open(link):
+    """
+        Parameters
+        ----
+        link: String
+            Desired link to be parsed into BSObj.
+
+        Description
+        ----
+        Returns a BSObj with urllib2 method, using the html parser, Headers and Tripadvisor localization prefixes.
+
+        Returns
+        -----
+        s:  BSObject
+        """
     request = urllib2.Request(link, headers=headers)
     soup = BeautifulSoup(urllib2.urlopen(request).read(), "html.parser")
     return soup

@@ -1,7 +1,28 @@
+"""
+@lib: listGenerate
+
+@author: Peter Pigler
+"""
 import soup as soupOpen
 
 
 def getLocalizationCityList(link):
+    """
+        Parameters
+        ----
+        link: String
+            Desired soupOpen link to be parsed into BSObj.
+
+        Description
+        ----
+        Returns a python-list of links with urllib2 method, using the html parser, Headers and Tripadvisor
+        localization prefixes found
+        in the soup lib.
+
+        Returns
+        -----
+        l: python_list
+        """
     try:
         soup = soupOpen.open(link)
     except:
@@ -16,7 +37,22 @@ def getLocalizationCityList(link):
     return result
 
 
-def getCityList(countryID): # returns list cities within given countryID's from TripAdvisor
+def getCityList(countryID): # returns list cities within given countryID's from
+    """
+       Parameters
+       ----
+       countryID: String
+           Desired Tripadvisor country_id
+
+       Description
+       ----
+       Returns a python-list of links using link generate under Tripadvisor hood with urllib2 method, using the
+       html parser, Headers and Tripadvisor localization prefixes found in the soup lib.
+
+       Returns
+       -----
+       l: python_list
+           """
     result = {"city_name": [], "city_id":[]}
     try:
         soup = soupOpen.open(soupOpen.TRIPADVISORUK+"/Hotels-"+countryID)
@@ -42,6 +78,16 @@ def getCityList(countryID): # returns list cities within given countryID's from 
 
 
 def getAccentsensitiveList():
+    """
+       Description
+       ----
+       Returns a python-list of accent city names and links using link generate under Tripadvisor hood with
+       urllib2 method, using the html parser, Headers and Tripadvisor localization prefixes found in the soup lib.
+
+       Returns
+       -----
+       l: python_list
+           """
     result = {"city_name": [], "city_id":[]}
     try:
         soup = soupOpen.open(soupOpen.TRIPADVISORHU+"/Hotels-g274881-Hungary-Hotels.html#LOCATION_LIST")
@@ -66,6 +112,21 @@ def getAccentsensitiveList():
     return result
 
 def findCityList(country):
+    """
+           Parameters
+           ----
+           countryID: String
+               Desired Tripadvisor country_id
+
+           Description
+           ----
+           Returns a python-list of links using link generate under Tripadvisor hood with dynamic search urllib2 method,
+            using the html parser, Headers and Tripadvisor localization prefixes found in the soup lib.
+
+           Returns
+           -----
+           l: python_list
+               """
 
     soup = soupOpen.open("https://www.tripadvisor.com/ForumHome")
     result = []

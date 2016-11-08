@@ -1,8 +1,7 @@
 # coding=utf-8
 # encoding=utf-8
 """
-@scrapeTripInfo
-
+@lib: scrapeTripInfo
 
 @author: Peter Pigler
 """

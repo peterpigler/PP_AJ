@@ -10,6 +10,7 @@ import pandas
 
 from scrapeTripInfo import scrapeOverview, scrapeAccommodations, scrapeAttractions, scrapeRestaurants, \
     getAccommodationFeatures, getUserAccommodationReviews, getUserRestaurantReviews
+import scrapeTripInfo
 from listGenerate import findCityList
 
 def scrapeCity(_city, filename):
@@ -44,7 +45,8 @@ def scrapeCity(_city, filename):
     writer.save()
     return {"overview": overviews, "hotels": hotels, "restaurants": restaurants, "attractions": attractions}
 
-
+import pydoc
+"""
 def stalkReviewer(filename):
     return
 
@@ -52,6 +54,7 @@ list = findCityList("Hungary")
 print list
 for city in list["city_id"]:
     scrapeCity(city,city+".xlsx")
+"""
 """
 locations = get_city_list()
 for city in locations:
