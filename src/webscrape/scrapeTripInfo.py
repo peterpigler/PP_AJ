@@ -18,6 +18,23 @@ PRICERANGE = [u'£', u"££ - £££", u"££££"]
 
 
 def scrapeOverview(_city):
+    """
+    Parameters
+    ----
+    _city: String
+        The _city_id of the analysable city
+
+    Description
+    ----
+    Returns a Pandas Dataframe, with the city's first step-depth analise, including name of the
+    given city_id, contents and quantities of accommodations, restaurants, attractions.
+
+    Can handle multi-paged sites.
+
+    Returns
+    -----
+    d: Dataframe
+    """
     citySplit = _city.split('-')
     # overview
     try:
@@ -65,6 +82,23 @@ def scrapeOverview(_city):
 
 
 def scrapeAccommodations(_city):
+    """
+    Parameters
+    ----
+    _city: String
+        The _city_id of the analysable city
+
+    Description
+    ----
+    Returns a Pandas Dataframe, with the city's second step-depth analise, including name of the
+    accommodations found in _city, review quantities and ratings and accommodation types.
+
+    Can handle multi-paged sites.
+
+    Returns
+    -----
+    d: Dataframe
+    """
     accommodations = [[], [], [], [], []]
     try:
         soup = soupOpen.open(soupOpen.TRIPADVISORUK + "/Hotels-" + _city + "-Hotels.html")
@@ -125,6 +159,23 @@ def scrapeAccommodations(_city):
 
 
 def scrapeAttractions(_city):
+    """
+        Parameters
+        ----
+        _city: String
+            The _city_id of the analysable city
+
+        Description
+        ----
+        Returns a Pandas Dataframe, with the city's second step-depth analise, including name of the
+        attractions found in _city, review quantities and ratings.
+
+        Can handle multi-paged sites.
+
+        Returns
+        -----
+        d: Dataframe
+        """
     attractions = [[], [], [], []]
     try:
         soup = soupOpen.open(soupOpen.TRIPADVISORCOM + "/Attractions-" + _city + "-Activities.html")
@@ -169,6 +220,23 @@ def scrapeAttractions(_city):
 
 
 def scrapeRestaurants(_city):
+    """
+        Parameters
+        ----
+        _city: String
+            The _city_id of the analysable city
+
+        Description
+        ----
+        Returns a Pandas Dataframe, with the city's second step-depth analise, including name of the
+        restaurants found in _city, review quantities and ratings, restaurant types.
+
+        Can handle multi-paged sites.
+
+        Returns
+        -----
+        d: Dataframe
+        """
     restaurants = [[], [], [], [], []]
     try:
         soup = soupOpen.open(soupOpen.TRIPADVISORUK + "/Restaurants-" + _city + ".html")
@@ -221,6 +289,25 @@ def scrapeRestaurants(_city):
 
 
 def getUserAccommodationReviews(data_frame, city_id):
+    """
+        Parameters
+        ----
+        data_frame: Dataframe
+            The given city accommodation dataframe
+        _city: String
+            The _city_id of the analysable city
+
+        Description
+        ----
+        Returns a Pandas Dataframe, with the city's third step-depth analise, including accommodations'
+        user reviews with ratings, review-text, date. Further step is to use sentiment-analysis
+
+        Can handle multi-paged sites.
+
+        Returns
+        -----
+        d: Dataframe
+        """
     hotel_list = data_frame["hotel_id"].tolist()
     city_users = [[], [], [], [], []]
     for hotel in hotel_list:
@@ -263,6 +350,25 @@ def getUserAccommodationReviews(data_frame, city_id):
 
 
 def getUserRestaurantReviews(data_frame, city_id):
+    """
+        Parameters
+        ----
+        data_frame: Dataframe
+            The given city restaurant dataframe
+        _city: String
+            The _city_id of the analysable city
+
+        Description
+        ----
+        Returns a Pandas Dataframe, with the city's third step-depth analise, including restaurants'
+        user reviews with ratings, review-text, date. Further step is to use sentiment-analysis
+
+        Can handle multi-paged sites.
+
+        Returns
+        -----
+        d: Dataframe
+        """
     restaurant_list = data_frame["restaurant_id"].tolist()
     city_users = [[], [], []]   # 0. restaurant id, 1. user id, 2. rating
     for restaurant in restaurant_list:
@@ -302,6 +408,25 @@ def getUserRestaurantReviews(data_frame, city_id):
     return city_users_dataframe
 
 def getAccommodationFeatures(data_frame, city_id):
+    """
+        Parameters
+        ----
+        data_frame: Dataframe
+            The given city accommodation dataframe
+        _city: String
+            The _city_id of the analysable city
+
+        Description
+        ----
+        Returns a Pandas Dataframe, with the city's third step-depth analise, including accommodations'
+        features. For further notations see FEATURES.
+
+        Can handle multi-paged sites.
+
+        Returns
+        -----
+        d: Dataframe
+        """
     hotel_list = data_frame["hotel_id"].tolist()
     result = []
     for hotel in hotel_list:
