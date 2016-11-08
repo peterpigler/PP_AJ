@@ -3,6 +3,7 @@
 """
 @scrapeTripInfo
 
+
 @author: Peter Pigler
 """
 import numpy
