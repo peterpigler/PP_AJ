@@ -1,0 +1,232 @@
+NAME
+
+    Soup - @lib: Soup
+    
+DESCRIPTION
+    # coding=utf-8
+    # encoding=utf-8
+
+    @author: Peter Pigler
+
+FUNCTIONS
+    open(link)
+        Parameters
+        ----
+        link: String
+            Desired link to be parsed into BSObj.
+        
+        Description
+        ----
+        Returns a BSObj with urllib2 method, using the html parser, Headers and Tripadvisor localization prefixes.
+        
+        Returns
+        -----
+        s:  BSObject
+
+DATA
+    TRIPADVISORCOM = 'https://www.tripadvisor.com'
+    TRIPADVISORHU = 'https://www.tripadvisor.co.hu'
+    TRIPADVISORUK = 'https://www.tripadvisor.co.uk'
+    headers = {'Accept': 'text/html,application/xhtml+xml,application/xml;...
+---------
+
+NAME
+    scrapeTripInfo - @lib: scrapeTripInfo
+
+DESCRIPTION
+    @author: Peter Pigler
+
+FUNCTIONS
+    getAccommodationFeatures(data_frame, city_id)
+        Parameters
+        ----
+        data_frame: Dataframe
+            The given city accommodation dataframe
+        _city: String
+            The _city_id of the analysable city
+        
+        Description
+        ----
+        Returns a Pandas Dataframe, with the city's third step-depth analise, including accommodations'
+        features. For further notations see FEATURES.
+        
+        Can handle multi-paged sites.
+        
+        Returns
+        -----
+        d: Dataframe
+    
+    getUserAccommodationReviews(data_frame, city_id)
+        Parameters
+        ----
+        data_frame: Dataframe
+            The given city accommodation dataframe
+        _city: String
+            The _city_id of the analysable city
+        
+        Description
+        ----
+        Returns a Pandas Dataframe, with the city's third step-depth analise, including accommodations'
+        user reviews with ratings, review-text, date. Further step is to use sentiment-analysis
+        
+        Can handle multi-paged sites.
+        
+        Returns
+        -----
+        d: Dataframe
+    
+    getUserRestaurantReviews(data_frame, city_id)
+        Parameters
+        ----
+        data_frame: Dataframe
+            The given city restaurant dataframe
+        _city: String
+            The _city_id of the analysable city
+        
+        Description
+        ----
+        Returns a Pandas Dataframe, with the city's third step-depth analise, including restaurants'
+        user reviews with ratings, review-text, date. Further step is to use sentiment-analysis
+        
+        Can handle multi-paged sites.
+        
+        Returns
+        -----
+        d: Dataframe
+    
+    scrapeAccommodations(_city)
+        Parameters
+        ----
+        _city: String
+            The _city_id of the analysable city
+        
+        Description
+        ----
+        Returns a Pandas Dataframe, with the city's second step-depth analise, including name of the
+        accommodations found in _city, review quantities and ratings and accommodation types.
+        
+        Can handle multi-paged sites.
+        
+        Returns
+        -----
+        d: Dataframe
+    
+    scrapeAttractions(_city)
+        Parameters
+        ----
+        _city: String
+            The _city_id of the analysable city
+        
+        Description
+        ----
+        Returns a Pandas Dataframe, with the city's second step-depth analise, including name of the
+        attractions found in _city, review quantities and ratings.
+        
+        Can handle multi-paged sites.
+        
+        Returns
+        -----
+        d: Dataframe
+    
+    scrapeOverview(_city)
+        Parameters
+        ----
+        _city: String
+            The _city_id of the analysable city
+        
+        Description
+        ----
+        Returns a Pandas Dataframe, with the city's first step-depth analise, including name of the
+        given city_id, contents and quantities of accommodations, restaurants, attractions.
+        
+        Can handle multi-paged sites.
+        
+        Returns
+        -----
+        d: Dataframe
+    
+    scrapeRestaurants(_city)
+        Parameters
+        ----
+        _city: String
+            The _city_id of the analysable city
+        
+        Description
+        ----
+        Returns a Pandas Dataframe, with the city's second step-depth analise, including name of the
+        restaurants found in _city, review quantities and ratings, restaurant types.
+        
+        Can handle multi-paged sites.
+        
+        Returns
+        -----
+        d: Dataframe
+
+DATA
+    HOTELTYPES = ['Best Value', 'Boutique', 'Budget', 'Business', 'Charmin...
+    PRICERANGE = [u'\xa3', u'\xa3\xa3 - \xa3\xa3\xa3', u'\xa3\xa3\xa3\xa3'...
+
+---------
+NAME
+    listGenerate - @lib: listGenerate
+
+DESCRIPTION
+    @author: Peter Pigler
+
+FUNCTIONS
+    findCityList(country)
+        Parameters
+        ----
+        countryID: String
+            Desired Tripadvisor country_id
+        
+        Description
+        ----
+        Returns a python-list of links using link generate under Tripadvisor hood with dynamic search urllib2 method,
+         using the html parser, Headers and Tripadvisor localization prefixes found in the soup lib.
+        
+        Returns
+        -----
+        l: python_list
+    
+    getAccentsensitiveList()
+        Description
+        ----
+        Returns a python-list of accent city names and links using link generate under Tripadvisor hood with
+        urllib2 method, using the html parser, Headers and Tripadvisor localization prefixes found in the soup lib.
+        
+        Returns
+        -----
+        l: python_list
+    
+    getCityList(countryID)
+        Parameters
+        ----
+        countryID: String
+            Desired Tripadvisor country_id
+        
+        Description
+        ----
+        Returns a python-list of links using link generate under Tripadvisor hood with urllib2 method, using the
+        html parser, Headers and Tripadvisor localization prefixes found in the soup lib.
+        
+        Returns
+        -----
+        l: python_list
+    
+    getLocalizationCityList(link)
+        Parameters
+        ----
+        link: String
+            Desired soupOpen link to be parsed into BSObj.
+        
+        Description
+        ----
+        Returns a python-list of links with urllib2 method, using the html parser, Headers and Tripadvisor
+        localization prefixes found
+        in the soup lib.
+        
+        Returns
+        -----
+        l: python_list
+
