@@ -7,10 +7,10 @@
 @author: Peter Pigler
 """
 import pandas
+import numpy as np
 
 from scrapeTripInfo import scrapeOverview, scrapeAccommodations, scrapeAttractions, scrapeRestaurants, \
-    getAccommodationFeatures, getUserAccommodationReviews, getUserRestaurantReviews
-import scrapeTripInfo
+    getAccommodationFeatures, getUserAccommodationReviews, getUserRestaurantReviews, getUserAttractionReviews
 from listGenerate import findCityList
 
 def scrapeCity(_city, filename):
@@ -19,33 +19,83 @@ def scrapeCity(_city, filename):
     # overviews
     overviews = scrapeOverview(_city)
     overviews.to_excel(writer, sheet_name="Overview")
+
     # hotels
     print "....accommodations...."
     hotels = scrapeAccommodations(_city)
     hotels.to_excel(writer, sheet_name="Hotels")
+
     # accommodation features
     print "........features...."
     features = getAccommodationFeatures(hotels,_city)
-    pandas.DataFrame(features).to_excel(writer, sheet_name="Accommodation Features")
+    pandas.DataFrame(features).replace(0,np.nan).replace('',np.nan).to_excel(writer, sheet_name="Accommodation Features",na_rep='nan')
     print "........users...."
     reviews = getUserAccommodationReviews(hotels,_city)
     reviews.to_excel(writer, sheet_name="Accommodation Reviews")
+
     # attractions
+
     print "....attractions...."
     attractions= scrapeAttractions(_city)
     attractions.to_excel(writer, sheet_name="Attractions")
+    print ".......users...."
+    reviews= getUserAttractionReviews(attractions, _city)
+    reviews.to_excel(writer, sheet_name='Attraction Reviews')
     # restaurants
     print "....restaurants...."
+
     restaurants = scrapeRestaurants(_city)
     restaurants.to_excel(writer, sheet_name="Restaurants")
     print"........users...."
-    reviews = getUserRestaurantReviews(restaurants, _city)
+    reviews= getUserRestaurantReviews(restaurants, _city)
     reviews.to_excel(writer, sheet_name="Restaurant Reviews")
 
     writer.save()
     return {"overview": overviews, "hotels": hotels, "restaurants": restaurants, "attractions": attractions}
 
-import pydoc
+
+list = findCityList("Hungary")
+print list
+frame = []
+acc, acc_rev, acc_fea, attr, attr_rev, res, res_rev = [], [], [], [], [], [], []
+for city in list["city_id"]:
+    # scrapeCity(city,city+".xlsx")
+    frame.append(pandas.read_excel(city+'.xlsx',sheetname='Overview'))
+    acc.append(pandas.read_excel(city+'.xlsx', sheetname='Hotels'))
+    acc_fea.append(pandas.read_excel(city+'.xlsx', sheetname='Accommodation Features'))
+    acc_rev.append(pandas.read_excel(city + '.xlsx', sheetname='Accommodation Reviews'))
+    attr.append(pandas.read_excel(city + '.xlsx', sheetname='Attractions'))
+    attr_rev.append(pandas.read_excel(city + '.xlsx', sheetname='Attraction Reviews'))
+    res.append(pandas.read_excel(city + '.xlsx', sheetname='Restaurants'))
+    res_rev.append(pandas.read_excel(city + '.xlsx', sheetname='Restaurant Reviews'))
+
+data = pandas.concat(frame)
+accomm = pandas.concat(acc)
+accomm_rev = pandas.concat(acc_rev)
+accomm_fea = pandas.concat(acc_fea)
+attraction = pandas.concat(attr)
+attraction_rev = pandas.concat(attr_rev)
+rest = pandas.concat(res)
+rest_rev = pandas.concat(res_rev)
+
+writer = pandas.ExcelWriter('Data.xlsx')
+
+data.to_excel(writer, sheet_name='Overview')
+accomm.to_excel(writer, sheet_name='Accommodations')
+accomm_fea.to_excel(writer, sheet_name='Accommodation Features')
+accomm_rev.to_excel(writer, sheet_name='Accommodation Reviews')
+attraction.to_excel(writer, sheet_name='Attractions')
+attraction_rev.to_excel(writer, sheet_name='Attractions Reviews')
+rest.to_excel(writer, sheet_name='Restaurants')
+rest.to_excel(writer, sheet_name='Restaurant Reviews')
+
+writer.save()
+
+"""
+src = scrapethis('g274887','7306673')
+print src
+print len(src[1])
+"""
 """
 def stalkReviewer(filename):
     return
@@ -64,14 +114,6 @@ for city in locations:
 get_users_hotel("g188671")
 
 
-locations = getHungarianCityList()
-Data = {"overview": [], "hotels": {}, "restaurants": {}, "attractions": {}}
-for city in locations:
-    _data = scrapeCity(city, city + ".xlsx")
-    Data["overview"].append(_data["overview"])
-    Data["hotels"][city] = _data["hotels"]
-    Data["restaurants"][city] = _data["restaurants"]
-    Data["attractions"][city] = _data["attractions"]
 
 writer = pandas.ExcelWriter("Data.xlsx")
 dataframeOverview = pandas.DataFrame()
