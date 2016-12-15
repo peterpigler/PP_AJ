@@ -9,6 +9,7 @@ data = pd.read_excel('DataOverview.xlsx')
 data = data.fillna(0)
 labels = data['CITY_NAME'].as_matrix()
 print labels
+
 data = np.array(data.drop(['CITY_NAME', 'CITY_ID'], axis=1).as_matrix())
 [N,n] = map(int,data.shape)
 # Feature scaling
